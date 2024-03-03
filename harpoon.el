@@ -159,8 +159,8 @@ If there is no Harpoon buffer return nil."
       (harpoon--insert-help (project-name proj))
       (goto-char (point-min))
       (unless (memq 'harpoon--process-buffer kill-buffer-hook)
-	(add-hook 'kill-buffer-hook 'harpoon--process-buffer nil t))
-      (switch-to-buffer buffer))))
+	(add-hook 'kill-buffer-hook 'harpoon--process-buffer nil t)))
+    (pop-to-buffer buffer)))
 
 (defun harpoon--write-file (file data)
   (with-temp-file file
