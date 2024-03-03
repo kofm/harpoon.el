@@ -1,10 +1,10 @@
 # harpoon.el
 
-Harpoon (<https://github.com/ThePrimeagen/harpoon>) replica for Emacs.
+Harpoon (<https://github.com/ThePrimeagen/harpoon>) rudimentary replica for Emacs.
 
 ## Introduction
 
-**harpoon.el** is a quick project-based bookmarking system which simplifies navigating between commonly used files in a project.
+**harpoon.el** is a quick project-based bookmarking system which simplifies navigating between commonly used files in a project. It leverages the built-in `project.el` and `bookmark.el` libraries.
 
 **Please note that this is under development and may not yet be thoroughly tested.**
 
@@ -13,7 +13,7 @@ Harpoon (<https://github.com/ThePrimeagen/harpoon>) replica for Emacs.
 It's pretty simple:
 
 1. Enable `harpoon-minor-mode`.
-2. To set a bookmark within a `project`, invoke `harpoon-set`.
+2. To set a bookmark **from inside a known project**, invoke `harpoon-set`.
 3. Upon setting a bookmark, the `*harpoon*` buffer will appear. You can also invoke it manually with the `harpoon-buffer` command.
 4. You can now adjust the order of your harpoon bookmarks and navigate as you please. If you manually edit the list, remember to press `C-c C-c` to update the harpoon list and close the buffer.
 5. You can switch to the *n*-th bookmark by employing the `(harpoon-jump n)` command.
