@@ -49,14 +49,11 @@
        (file (buffer-file-name)))
     (file-relative-name file root)))
 
-;;;###autoload
 (define-derived-mode harpoon-mode
-  prog-mode "Harpoon"
+  fundamental-mode "Harpoon"
   "Major mode for managing Harpoon bookmarks."
 
-  (setq font-lock-defaults
-	'((("^#.*" . 'font-lock-comment-face)
-	   ("`\\([^`']*\\)'" . 'font-lock-constant-face))))
+  (setq font-lock-defaults '((("^#.*" . 'font-lock-comment-face))))
 
   (setq display-line-numbers t)
   
@@ -67,12 +64,12 @@
     (define-key map (kbd "C-c C-s") 'harpoon-file-save)
     (define-key map (kbd "<return>") 'find-file-at-point)))
 
-;;;#autoload
 (defun harpoon-set ()
   "Set an Harpoon for the current project.
 
 If the file is already harpoon'd just update the existing harpoon with the new location. Otherwise, append the new harpoon to the project's list of harpoons. If the current buffer does not belong to a project, fail silently."
   (interactive)
+  (cl-assert harpoon-minor-mode nil "Harpoon minor mode should be enabled")
   (when-let ((harpoon-name (harpoon--get-bookmark-name))
 	     (harpoon (funcall bookmark-make-record-function)))
     (if-let ((existing (assoc harpoon-name harpoon-alist)))
@@ -83,7 +80,6 @@ If the file is already harpoon'd just update the existing harpoon with the new l
     (harpoon--update-global-list)
     (harpoon-buffer)))
 
-;;;###autoload
 (defun harpoon-jump (n)
   (interactive)
   (when-let ((bookmark (nth n harpoon-alist)))
@@ -127,6 +123,7 @@ If there is no Harpoon buffer return nil."
 
 (defun harpoon-buffer ()
   (interactive)
+  (cl-assert harpoon-minor-mode nil "Harpoon minor mode should be enabled")
   (let ((buffer (get-buffer-create harpoon-buffer))
 	(files-list (mapcar #'car harpoon-alist)))
     (with-current-buffer buffer
@@ -158,28 +155,28 @@ If the hash table is empty don't do anything."
   (unless (eq (hash-table-count harpoon-global-list) 0)
     (harpoon--write-file harpoon-list-file harpoon-global-list)))
 
-(defun harpoon-file-load ()
-  (interactive)
+(defun harpoon--file-load ()
   (when (file-exists-p harpoon-list-file)
     (let ((contents (harpoon--read-file harpoon-list-file)))
       (setq harpoon-global-list contents)
       (message "Harpoons loaded from file!"))))
 
+;;;###autoload
 (define-minor-mode harpoon-minor-mode
   "A minor mode for using harpoon with emacs."
-  :lighter " Harpoon"
+  :lighter " Hp"
+  :keymap (let ((map (make-sparse-keymap)))
+	    map)
   :global t
   (if harpoon-minor-mode
       (progn 
+	(harpoon--file-load)
 	(add-hook 'buffer-list-update-hook #'harpoon--retrieve)
 	(add-hook 'kill-emacs-hook #'harpoon-file-save))
     (progn 
       (harpoon-file-save)
       (remove-hook 'buffer-list-update-hook #'harpoon--retrieve)
-      (remove-hook 'kill-emacs-hook #'harpoon-file-save)
-      )))
-
-(harpoon-file-load)
+      (remove-hook 'kill-emacs-hook #'harpoon-file-save))))
 
 (provide 'harpoon)
 ;; ;;; harpoon.el ends here
