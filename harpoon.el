@@ -1,8 +1,32 @@
-;;; harpoon.el  -*- lexical-binding: t -*-
-;;;
+;;; harpoon.el --- Harpoon rudimentary replica for Emacs.  -*- lexical-binding: t -*-
+
+;; Copyright (C) 2023 Gabriele Mongiano
+
+;; Author: Gabriele Mongiano <g.mongiano@me.com>
+;; Created: March 2024
+;; Keywords: navigation bookmark
+;; Version: 0.1
+
+;; This file is NOT part of GNU Emacs.
+
+
+;; This file is NOT part of GNU Emacs.
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 ;;; Commentary:
-;;; Harpoon replica for Emacs.
-;;;
+
 ;;; Code:
 (defgroup harpoon nil
   "Harpoons quick bookmarking."
@@ -179,4 +203,4 @@ If the hash table is empty don't do anything."
       (remove-hook 'kill-emacs-hook #'harpoon-file-save))))
 
 (provide 'harpoon)
-;; ;;; harpoon.el ends here
+;;; harpoon.el ends here
