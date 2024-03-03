@@ -93,7 +93,7 @@
 
 If the file is already harpoon'd just update the existing harpoon with the new location. Otherwise, append the new harpoon to the project's list of harpoons. If the current buffer does not belong to a project, fail silently."
   (interactive)
-  (cl-assert harpoon-minor-mode nil "Harpoon minor mode should be enabled")
+  (cl-assert harpoon-minor-mode nil "harpoon-minor-mode not enabled")
   (when-let ((harpoon-name (harpoon--get-bookmark-name))
 	     (harpoon (funcall bookmark-make-record-function)))
     (if-let ((existing (assoc harpoon-name harpoon-alist)))
@@ -147,15 +147,16 @@ If there is no Harpoon buffer return nil."
 
 (defun harpoon-buffer ()
   (interactive)
-  (cl-assert harpoon-minor-mode nil "Harpoon minor mode should be enabled")
-  (let ((buffer (get-buffer-create harpoon-buffer))
-	(files-list (mapcar #'car harpoon-alist)))
+  (cl-assert harpoon-minor-mode nil "harpoon-minor-mode not enabled")
+  (when-let ((proj (project-current))
+	     (buffer (get-buffer-create harpoon-buffer))
+	     (files-list (mapcar #'car harpoon-alist)))
     (with-current-buffer buffer
       (erase-buffer)
       (harpoon-mode)
       (dolist (file files-list)
 	(insert (format "%s\n" file)))
-      (harpoon--insert-help (project-name (project-current)))
+      (harpoon--insert-help (project-name proj))
       (goto-char (point-min))
       (unless (memq 'harpoon--process-buffer kill-buffer-hook)
 	(add-hook 'kill-buffer-hook 'harpoon--process-buffer nil t))
