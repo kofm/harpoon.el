@@ -29,6 +29,7 @@ You can read more about the concept of harpoon on the GitHub of the original imp
 ```emacs-lisp
 (use-package harpoon
   :load-path "/path/to/harpoon.el/"
+  ;; Example bindings
   :bind (:map harpoon-minor-mode-map
 	      ("C-c h m" . 'harpoon-set)
 	      ("C-c h l" . 'harpoon-buffer)
@@ -37,6 +38,17 @@ You can read more about the concept of harpoon on the GitHub of the original imp
 	      ("C-c h k" . (lambda () (interactive) (harpoon-jump 2)))
 	      ("C-c h l" . (lambda () (interactive) (harpoon-jump 3))))
   :config
+  ;; Example *harpoon* buffer config
+  (add-to-list
+   'display-buffer-alist
+   '("\\*harpoon\\*"
+     (display-buffer-in-side-window)
+     (side . bottom)
+     (slot . -1)
+     (window-height . 0.33)
+     (window-parameters
+      (no-delete-other-windows . nil))))
+  ;; Activate the minor mode
   (harpoon-minor-mode 1))
 ```
 
