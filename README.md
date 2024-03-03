@@ -1,4 +1,4 @@
-# Harpoon for Emacs
+# harpoon.el
 
 Harpoon (<https://github.com/ThePrimeagen/harpoon>) replica for Emacs.
 
