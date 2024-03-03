@@ -1,10 +1,9 @@
-;;; kofm-harpoon.Harpoon. -*- lexical-binding: t -*-
+;;; harpoon.el  -*- lexical-binding: t -*-
 ;;;
 ;;; Commentary:
-;;; Harpoon like functionalities
+;;; Harpoon replica for Emacs.
 ;;;
 ;;; Code:
-
 (defgroup harpoon nil
   "Harpoons quick bookmarking."
   :version "29.1"
@@ -182,5 +181,5 @@ If the hash table is empty don't do anything."
 
 (harpoon-file-load)
 
-(provide 'kofm-harpoon)
-;; ;;; kofm-harpoon.el ends here
+(provide 'harpoon)
+;; ;;; harpoon.el ends here
