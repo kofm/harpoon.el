@@ -1,10 +1,10 @@
 ;;; harpoon.el --- Harpoon rudimentary replica for Emacs.  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2023 Gabriele Mongiano
+;; Copyright (C) 2024 Gabriele Mongiano
 
 ;; Author: Gabriele Mongiano <g.mongiano@me.com>
 ;; Created: March 2024
-;; Keywords: navigation bookmark
+;; Keywords: project navigation bookmark
 ;; Version: 0.1
 
 ;; This file is NOT part of GNU Emacs.
