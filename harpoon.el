@@ -105,9 +105,19 @@ If the file is already harpoon'd just update the existing harpoon with the new l
     (harpoon-buffer)))
 
 (defun harpoon-jump (n)
+  "Generic function to jump to the n-th harpoon. Mind that `n' is 0-indexed.
+
+There are available aliases pre-defined like `harpoon-jump-1', `harpoon-jump-2', and so on, which are also 1-indexed to reflect the harpoon in the harpoon buffer."
   (interactive)
   (when-let ((bookmark (nth n harpoon-alist)))
     (bookmark-jump bookmark)))
+
+;; Create harpoon-jump aliases. See `harpoon-jump' docstring.
+(dotimes (n 8)
+  (let ((func-name (intern (format "harpoon-jump-%d" (1+ n)))))
+    (defalias func-name `(lambda () (interactive) (harpoon-jump ,n))
+      (format "Jump to harpoon #%d." (1+ n)))))
+
 
 (defun harpoon--alist-get-by-key (key)
   "Get an entry from harpoon-alist by association key."
