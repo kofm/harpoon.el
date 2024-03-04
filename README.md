@@ -52,6 +52,17 @@ You can read more about the concept of harpoon on the GitHub of the original imp
   (harpoon-minor-mode 1))
 ```
 
+### Using `elpaca`
+
+<https://github.com/progfolio/elpaca>
+
+```emacs-lisp
+(use-package harpoon
+  :elpaca (harpoon :host github :repo "kofm/harpoon.el")
+  ;; Your config here.
+  )
+```
+
 ## Alternatives
 
 Users seeking the full Harpoon experience should probably check out the other Emacs implementation <https://github.com/otavioschwanck/harpoon.el>, which seems to be fully featured. This implementation is very simple and rudimentary. However, if you just need the basic functionality and usually rely on `project.el`, you can give it a try.
