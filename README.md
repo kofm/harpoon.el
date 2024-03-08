@@ -32,7 +32,7 @@ You can read more about the concept of harpoon on the GitHub of the original imp
   ;; Example bindings
   :bind (:map harpoon-minor-mode-map
 	      ("C-c h m" . 'harpoon-set)
-	      ("C-c h l" . 'harpoon-buffer)
+	      ("C-c h b" . 'harpoon-buffer)
 	      ("C-c h h" . 'harpoon-jump-1)
 	      ("C-c h j" . 'harpoon-jump-2)
 	      ("C-c h k" . 'harpoon-jump-3)
