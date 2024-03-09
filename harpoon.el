@@ -155,21 +155,26 @@ If there is no Harpoon buffer return nil."
     (insert msg)))
 
 (defun harpoon-buffer ()
+  "Invoke the `harpoon' buffer.
+
+From the `harpoon' buffer you can rearrange and/or delete harpoons by swapping or deleting lines, respectively, using standard Emacs text motions."
   (interactive)
   (cl-assert harpoon-minor-mode nil "harpoon-minor-mode not enabled")
-  (when-let ((proj (project-current))
-	     (buffer (get-buffer-create harpoon-buffer))
-	     (files-list (mapcar #'car harpoon-alist)))
-    (with-current-buffer buffer
-      (erase-buffer)
-      (harpoon-mode)
-      (dolist (file files-list)
-	(insert (format "%s\n" file)))
-      (harpoon--insert-help (project-name proj))
-      (goto-char (point-min))
-      (unless (memq 'harpoon--process-buffer kill-buffer-hook)
-	(add-hook 'kill-buffer-hook 'harpoon--process-buffer nil t)))
-    (pop-to-buffer buffer)))
+  (if-let ((proj (project-current))
+	   (buffer (get-buffer-create harpoon-buffer))
+	   (files-list (mapcar #'car harpoon-alist)))
+      (progn 
+	(with-current-buffer buffer
+	  (erase-buffer)
+	  (harpoon-mode)
+	  (dolist (file files-list)
+	    (insert (format "%s\n" file)))
+	  (harpoon--insert-help (project-name proj))
+	  (goto-char (point-min))
+	  (unless (memq 'harpoon--process-buffer kill-buffer-hook)
+	    (add-hook 'kill-buffer-hook 'harpoon--process-buffer nil t))) 
+	(pop-to-buffer buffer))
+    (message "You either aren't in a project or there are no harpoons defined.")))
 
 (defun harpoon--write-file (file data)
   (with-temp-file file
