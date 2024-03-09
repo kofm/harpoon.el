@@ -52,12 +52,11 @@
 (defun harpoon--update-global-list ()
   "Update the harpoon global list with the current project's harpoons."
   (when-let* ((proj (project-current))
-	      (root (project-root proj))
-	      (harpoons harpoon-alist))
-    (puthash root harpoons harpoon-global-list)))
+	      (root (project-root proj)))
+    (puthash root harpoon-alist harpoon-global-list)))
 
 (defun harpoon--retrieve ()
-  "Update the project's harpoons from the harpoon global list"
+  "Update the project's harpoons from the harpoon global list."
   (when-let* ((proj (project-current))
 	      (root (project-root proj)))
     (let ((harpoons (gethash root harpoon-global-list)))
