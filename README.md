@@ -28,17 +28,17 @@ It's pretty simple:
    manually kill the buffer).
 5. You can switch to the *n*-th bookmark by employing the
    `harpoon-jump-n` commands, where *n* is the bookmark position in
-   the harpoon buffer.
+   the harpoon buffer. You can also move forward and backward through
+   your harpoon list using commands `harpoon-next` and `harpoon-prev`,
+   respectively.
+
 
 For instance, you can set keys combinations, e.g. `C-c h`, `C-c j`,
 `C-c k`, and `C-c l` (i.e. right-handed home row keys) to quickly jump
 to harpoons 1 through 4 (see the example configuration below). You can
-also move forward and backward through your harpoon list using
-commands `harpoon-next` and `harpoon-prev`, respectively.
-
-You can use `harpoon.el` to swiftly switch between frequently accessed
-files (but not only files) in your project, increasing productivity
-and reducing navigation time. You can read more about the concept of
+use `harpoon.el` to swiftly switch between frequently accessed files
+(but not only files) in your project, increasing productivity and
+reducing navigation time. You can read more about the concept of
 harpoon on the GitHub repository of the original implementation
 (<https://github.com/ThePrimeagen/harpoon>).
 
@@ -55,19 +55,35 @@ you want to force a save at any moment you can use `harpoon-file-save`
 
 You can achieve this by leveraging `project.el` builtin functionality:
 by defining `project-current-directory-override` as directory local
-variable you can tell Emacs to treat the current directory (and its
-sub-directories) as if it is part of another project. To do this, you
-can use interactive command `add-dir-local-variable`, like this:
-<kbd>M-x</kbd> `add-dir-local-variable` <kbd>RET</kbd> `nil` (apply to
-any mode) <kbd>RET</kbd> `project-current-directory-override`
-<kbd>RET</kbd> `/path/to/other/project` <kbd>RET</kbd>. Alternatively,
-you can manually edit the `.dir-locals` file of interest:
+variable you can tell Emacs to treat the a specific directory (and its
+sub-directories) as if it is part of an existing project.
+
+To do this, you can use interactive command `add-dir-local-variable`,
+like this: <kbd>M-x</kbd> `add-dir-local-variable` <kbd>RET</kbd>
+`nil` (apply to any mode) <kbd>RET</kbd>
+`project-current-directory-override` <kbd>RET</kbd>
+`/path/to/other/project` <kbd>RET</kbd>.
+
+Alternatively, you can manually edit the `.dir-locals` file of
+interest:
 
 ```elisp
 ;;; Directory Local Variables            -*- no-byte-compile: t -*-
 ;;; For more information see (info "(emacs) Directory Variables")
 
 ((nil . ((project-current-directory-override . "/path/to/other/project"))))
+```
+
+For more information see `(info "(emacs)Directory Variables")`.
+
+Another way of accomplishing this for a single file is to use **File
+Variables** (for more information see the Emacs manual, `(info
+"(emacs)Specifying File Variables")`). For example, in an org file you
+can insert as first line the following to make it part of the project
+located at `/path/to/other/project`:
+
+```org
+# -*- mode: org-mode; project-current-directory-override: "/path/to/other/project"; -*-
 ```
 
 ## Example configuration
