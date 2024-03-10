@@ -32,6 +32,7 @@ It's pretty simple:
    your harpoon list using commands `harpoon-next` and `harpoon-prev`,
    respectively.
 
+![harpoon.el screencast](pr/harpoon-screencast.gif)
 
 For instance, you can set keys combinations, e.g. `C-c h`, `C-c j`,
 `C-c k`, and `C-c l` (i.e. right-handed home row keys) to quickly jump
