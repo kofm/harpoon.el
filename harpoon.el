@@ -165,9 +165,7 @@ to a project, fail silently."
 	     (harpoon (funcall bookmark-make-record-function)))
     (if-let ((existing (assoc harpoon-name harpoon-alist)))
         (setcdr existing harpoon)
-      (progn
-	(push (cons harpoon-name harpoon) harpoon-alist)
-	(setq harpoon-alist (nreverse harpoon-alist))))
+	(add-to-list 'harpoon-alist (cons harpoon-name harpoon) t))
     (harpoon--update-global-list)
     (harpoon-buffer)))
 
