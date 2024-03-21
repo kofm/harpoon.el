@@ -152,20 +152,38 @@ If there is no Harpoon buffer return nil."
 
 ;;;; Commands
 
-(defun harpoon-set ()
-  "Set an Harpoon for the current project.
+;;;###autoload
+(define-minor-mode harpoon-minor-mode
+  "A minor mode for using harpoon with Emacs."
+  :lighter " Hp"
+  :keymap (let ((map (make-sparse-keymap)))
+	    map)
+  :global t
+  (if harpoon-minor-mode
+      (progn
+	(harpoon--file-load)
+	(add-hook 'buffer-list-update-hook #'harpoon--retrieve)
+	(add-hook 'kill-emacs-hook #'harpoon-file-save))
+    (progn
+      (harpoon-file-save)
+      (remove-hook 'buffer-list-update-hook #'harpoon--retrieve)
+      (remove-hook 'kill-emacs-hook #'harpoon-file-save))))
 
-If the file is already harpoon'd just update the existing harpoon
-with the new location.  Otherwise, append the new harpoon to the
-project's list of harpoons.  If the current buffer does not belong
-to a project, fail silently."
+
+(defun harpoon-set ()
+  "Set an harpoon for the current project.
+
+If the file is already harpoon'd just update the existing record
+with a new location. Otherwise, append the new record to the
+project's list of harpoons.  If the current buffer does not
+belong to a project, fail silently."
   (interactive)
   (cl-assert harpoon-minor-mode nil "harpoon-minor-mode not enabled")
-  (when-let ((harpoon-name (harpoon--buffer-name))
-	     (harpoon (funcall bookmark-make-record-function)))
-    (if-let ((existing (assoc harpoon-name harpoon-alist)))
-        (setcdr existing harpoon)
-	(add-to-list 'harpoon-alist (cons harpoon-name harpoon) t))
+  (when-let ((name (harpoon--buffer-name))
+	     (record (funcall bookmark-make-record-function)))
+    (if-let ((existing (assoc name harpoon-alist)))
+	(setcdr existing record)
+      (add-to-list 'harpoon-alist (cons name record) t))
     (harpoon--update-global-list)
     (harpoon-buffer)))
 
@@ -202,7 +220,6 @@ the harpoon in the harpoon buffer."
     (defalias func-name `(lambda () (interactive) (harpoon-jump ,n))
       (format "Jump to harpoon #%d." (1+ n)))))
 
-
 (define-derived-mode harpoon-mode
   fundamental-mode "Harpoon"
   "Major mode for managing Harpoon bookmarks."
@@ -215,25 +232,9 @@ the harpoon in the harpoon buffer."
   (let ((map harpoon-mode-map))
     (define-key map (kbd "g") 'harpoon-buffer)
     (define-key map (kbd "C-c C-c") 'harpoon-process-buffer-and-quit)
-    (define-key map (kbd "C-c C-s") 'harpoon-file-save)))
-
-;;;###autoload
-(define-minor-mode harpoon-minor-mode
-  "A minor mode for using harpoon with Emacs."
-  :lighter " Hp"
-  :keymap (let ((map (make-sparse-keymap)))
-	    map)
-  :global t
-  (if harpoon-minor-mode
-      (progn
-	(harpoon--file-load)
-	(add-hook 'buffer-list-update-hook #'harpoon--retrieve)
-	(add-hook 'kill-emacs-hook #'harpoon-file-save))
-    (progn
-      (harpoon-file-save)
-      (remove-hook 'buffer-list-update-hook #'harpoon--retrieve)
-      (remove-hook 'kill-emacs-hook #'harpoon-file-save))))
-
+    (define-key map (kbd "q") 'harpoon-process-buffer-and-quit)
+    (define-key map (kbd "C-c C-s") 'harpoon-file-save)
+    (define-key map (kbd "<return>") 'harpoon-return)))
 
 (defun harpoon-buffer ()
   "Invoke the `harpoon' buffer.
@@ -258,6 +259,17 @@ standard Emacs text motions."
 	    (add-hook 'kill-buffer-hook 'harpoon--process-buffer nil t)))
 	(pop-to-buffer buffer))
     (message "You either aren't in a project or there are no harpoons defined.")))
+
+(defun harpoon-return ()
+  "Jump to the harpoon at point from the harpoon buffer."
+  (interactive)
+  (when-let* ((buf (get-buffer harpoon-buffer))
+	      (lines (harpoon--buffer-get-lines))
+	      (n (with-current-buffer buf
+		   (line-number-at-pos (point) t)))
+	      (line (nth (1- n) lines))
+	      (h (harpoon--position line)))
+    (harpoon-jump h)))
 
 (defun harpoon-process-buffer-and-quit ()
   "Helper function to call `harpoon--process-buffer' and close the harpoon buffer."
